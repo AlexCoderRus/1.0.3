@@ -30,7 +30,7 @@ public class UserDetailServiceImp implements UserDetailsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = findByUserName(username);
 
@@ -40,15 +40,18 @@ public class UserDetailServiceImp implements UserDetailsService {
         return user.get();
     }
 
+    @Transactional(readOnly = true)
     public User findUserById(Long id) {
         Optional<User> userById = userRepository.findById(id);
         return userById.orElse(new User());
     }
 
+    @Transactional(readOnly = true)
     public List<User> allUser() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public boolean saveUser(User user) {
         Optional<User> userFromDB = userRepository.findByUsername(user.getUsername());
 
@@ -60,6 +63,7 @@ public class UserDetailServiceImp implements UserDetailsService {
         return true;
     }
 
+    @Transactional
     public boolean deleteUser(Long userId) {
         if (userRepository.findById(userId).isPresent()) {
             User user = findUserById(userId);
@@ -70,6 +74,7 @@ public class UserDetailServiceImp implements UserDetailsService {
         return false;
     }
 
+    @Transactional
     public void update(User user) {;
         if (user.getPassword().isEmpty()) {
             user.setPassword(userRepository.findById(user.getId()).get().getPassword());

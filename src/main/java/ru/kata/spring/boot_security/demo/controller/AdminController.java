@@ -58,7 +58,7 @@ public class AdminController {
         return model;
     }
 
-    @PostMapping ("/{id}")
+    @PatchMapping ("/{id}")
     public String update(@ModelAttribute("user") User user) {
         userDetailServiceImp.update(user);
         return "redirect:/admin/";
